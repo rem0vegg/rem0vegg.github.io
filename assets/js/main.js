@@ -7,6 +7,41 @@
   var year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
+  /* ---------- Theme toggle ---------- */
+  var themeBtn = document.getElementById("theme-toggle");
+  var metaTheme = document.getElementById("meta-theme");
+  if (themeBtn) {
+    themeBtn.addEventListener("click", function () {
+      var next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      if (metaTheme) metaTheme.content = next === "light" ? "#f5f1e8" : "#14213D";
+    });
+  }
+
+  /* ---------- Mobile menu ---------- */
+  var menuBtn = document.getElementById("menu-toggle");
+  var navMenu = document.getElementById("nav-links");
+
+  function closeMenu() {
+    if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
+    if (navMenu) navMenu.classList.remove("is-open");
+  }
+
+  if (menuBtn && navMenu) {
+    menuBtn.addEventListener("click", function () {
+      var open = menuBtn.getAttribute("aria-expanded") === "true";
+      menuBtn.setAttribute("aria-expanded", String(!open));
+      navMenu.classList.toggle("is-open");
+    });
+    navMenu.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", closeMenu);
+    });
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".site-nav")) closeMenu();
+    });
+  }
+
   /* ---------- Reveal on scroll ---------- */
   var reveals = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window && !reduceMotion) {
@@ -50,7 +85,6 @@
     );
     document.querySelectorAll("header.hero, section[id]").forEach(function (el) { spy.observe(el); });
 
-    // Short last sections may never reach the observer band: mark the last one at page bottom.
     window.addEventListener(
       "scroll",
       function () {
@@ -86,7 +120,6 @@
       caption.textContent = cap ? cap.textContent : "";
       count.textContent = index + 1 + " / " + triggers.length;
 
-      // Warm the cache for the neighbours.
       [index - 1, index + 1].forEach(function (n) {
         var pre = new Image();
         pre.src = triggers[(n + triggers.length) % triggers.length].dataset.full;
@@ -108,7 +141,6 @@
     dialog.querySelector(".lb-prev").addEventListener("click", function () { show(index - 1); });
     dialog.querySelector(".lb-next").addEventListener("click", function () { show(index + 1); });
 
-    // Click on the empty backdrop area closes the dialog.
     dialog.addEventListener("click", function (e) {
       if (!e.target.closest("img, button, figcaption, .lb-count")) dialog.close();
     });
@@ -118,7 +150,6 @@
       else if (e.key === "ArrowRight") show(index + 1);
     });
 
-    // Swipe on touch screens.
     var startX = null;
     dialog.addEventListener("touchstart", function (e) { startX = e.changedTouches[0].clientX; }, { passive: true });
     dialog.addEventListener("touchend", function (e) {
