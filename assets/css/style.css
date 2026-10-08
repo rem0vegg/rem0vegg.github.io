@@ -103,6 +103,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   justify-content: center;
   align-items: center;
   height: var(--nav-h);
+  position: relative;
 }
 .links {
   display: flex;
@@ -132,6 +133,29 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .links a:hover,
 .links a[aria-current="true"] { opacity: 1; color: var(--brass); }
 .links a[aria-current="true"]::after { transform: scaleX(1); }
+
+/* Hamburger */
+.menu-btn {
+  position: absolute;
+  left: 0;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+.menu-btn span {
+  display: block;
+  height: 1.5px;
+  background: var(--cream);
+  border-radius: 1px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.menu-btn[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.menu-btn[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
 /* ==========================================================================
    Hero
@@ -208,6 +232,7 @@ h2 {
 /* ==========================================================================
    Achievements
    ========================================================================== */
+#achievements h2 { margin-bottom: 64px; }
 .ach { display: grid; gap: 80px; }
 .card { padding-top: 24px; border-top: 1px solid var(--line); }
 
@@ -276,6 +301,7 @@ figcaption {
 /* ==========================================================================
    Skills
    ========================================================================== */
+#skills h2 { margin-bottom: 56px; }
 .skills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px; }
 .skills h3 {
   margin-bottom: 14px;
@@ -368,6 +394,7 @@ figcaption {
 .lb-stage img.is-loaded { opacity: 1; }
 .lb-meta { max-width: 760px; text-align: center; }
 .lb-meta figcaption { margin: 0; font-size: 17px; color: var(--cream-soft); }
+.lb-caption { font-style: italic; }
 .lb-count { margin-top: 4px; font-size: 13px; letter-spacing: 0.2em; color: var(--muted); }
 
 .lb-btn {
@@ -411,6 +438,37 @@ figcaption {
   .skills { grid-template-columns: 1fr; gap: 36px; }
   .exp { grid-template-columns: 1fr; gap: 6px; }
   .ach { gap: 64px; }
+
+  /* Mobile nav */
+  .menu-btn { display: flex; }
+  .links {
+    position: absolute;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 12px 28px 20px;
+    background: var(--navy);
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+  }
+  .links.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+  .links a {
+    display: block;
+    padding: 10px 0;
+    font-size: 15px;
+    letter-spacing: 0.15em;
+    opacity: 1;
+  }
 
   /* Photo rows become swipeable */
   .gallery {

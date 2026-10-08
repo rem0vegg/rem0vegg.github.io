@@ -7,6 +7,29 @@
   var year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
+  /* ---------- Mobile menu ---------- */
+  var menuBtn = document.getElementById("menu-toggle");
+  var navMenu = document.getElementById("nav-links");
+
+  function closeMenu() {
+    if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
+    if (navMenu) navMenu.classList.remove("is-open");
+  }
+
+  if (menuBtn && navMenu) {
+    menuBtn.addEventListener("click", function () {
+      var open = menuBtn.getAttribute("aria-expanded") === "true";
+      menuBtn.setAttribute("aria-expanded", String(!open));
+      navMenu.classList.toggle("is-open");
+    });
+    navMenu.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", closeMenu);
+    });
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".site-nav")) closeMenu();
+    });
+  }
+
   /* ---------- Reveal on scroll ---------- */
   var reveals = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window && !reduceMotion) {
